@@ -1,5 +1,4 @@
-import React from 'react';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { useData } from '../context/DataContext';
 import { TrendingUp, Users, UserMinus, UserCheck } from 'lucide-react';
@@ -46,48 +45,6 @@ export default function Analytics() {
     { label: 'Engagement Rate', value: `${engagementRate}%`, description: 'Mutuals from followers', icon: TrendingUp, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' },
     { label: 'Unfollower %', value: `${unfollowerPercentage}%`, description: 'Of accounts you follow', icon: UserMinus, color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-500/10' },
   ];
-
-  // Build time series (monthly) from timestamps available on users
-  const buildMonthlySeries = (items: typeof followers) => {
-    // Collect timestamps (seconds) and convert to JS Date
-    const dates = items
-      .map(i => i.timestamp)
-      .filter(Boolean)
-      .map((ts: number) => new Date(ts * 1000));
-
-    if (dates.length === 0) return [];
-
-    // Group by YYYY-MM
-    const counts: Record<string, number> = {};
-    dates.forEach(d => {
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      counts[key] = (counts[key] || 0) + 1;
-    });
-
-    // Build sorted keys range from earliest to latest
-    const keys = Object.keys(counts).sort();
-
-    // Build cumulative series
-    const series: { period: string; count: number; cumulative: number }[] = [];
-    let cum = 0;
-    keys.forEach(k => {
-      cum += counts[k];
-      series.push({ period: k, count: counts[k], cumulative: cum });
-    });
-
-    return series;
-  };
-
-  const followersSeries = buildMonthlySeries(followers);
-  const followingSeries = buildMonthlySeries(following);
-
-  // Merge series on same periods
-  const allPeriods = Array.from(new Set([...(followersSeries.map(s => s.period)), ...(followingSeries.map(s => s.period))])).sort();
-  const growthData = allPeriods.map(p => ({
-    period: p,
-    followers: (followersSeries.find(s => s.period === p)?.cumulative) || 0,
-    following: (followingSeries.find(s => s.period === p)?.cumulative) || 0,
-  }));
 
   return (
     <div className="space-y-6">
@@ -139,7 +96,7 @@ export default function Analytics() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => value.toLocaleString()} />
+                  <Tooltip formatter={(value) => Number(value ?? 0).toLocaleString()} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -169,7 +126,7 @@ export default function Analytics() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => value.toLocaleString()} />
+                  <Tooltip formatter={(value) => Number(value ?? 0).toLocaleString()} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -188,7 +145,7 @@ export default function Analytics() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis dataKey="category" />
                   <YAxis />
-                  <Tooltip formatter={(value) => value.toLocaleString()} />
+                  <Tooltip formatter={(value) => Number(value ?? 0).toLocaleString()} />
                   <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>

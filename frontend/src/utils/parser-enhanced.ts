@@ -88,7 +88,7 @@ function parseFollowersFormat(data: any, stats: any): InstagramUser[] {
     return users;
   }
 
-  data.forEach((entry, idx) => {
+  data.forEach((entry) => {
     if (!entry || typeof entry !== 'object') {
       stats.nullsSkipped++;
       return;

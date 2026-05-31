@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserList } from '../components/ui/UserList';
 import { useData } from '../context/DataContext';
 

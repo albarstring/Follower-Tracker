@@ -1,6 +1,5 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, UserMinus, Activity, UploadCloud, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, UserMinus, Activity, UploadCloud, Settings } from 'lucide-react';
 
 export function Sidebar() {
   const routes = [

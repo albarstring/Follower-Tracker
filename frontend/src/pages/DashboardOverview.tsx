@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Users, UserMinus, UserCheck, TrendingUp } from 'lucide-react';
 import { useData } from '../context/DataContext';

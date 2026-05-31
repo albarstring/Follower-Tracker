@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { InstagramUser } from '../../utils/parser';
 import { ExternalLink, Search } from 'lucide-react';
 
